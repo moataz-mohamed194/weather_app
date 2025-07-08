@@ -6,7 +6,16 @@ class AppTheme {
       scaffoldBackgroundColor: Colors.white,
       brightness: Brightness.light,
       textTheme: TextTheme(
-        headlineLarge: TextStyle(
-            color: Colors.black, fontSize: 25.sp, fontWeight: FontWeight.w700),
-      ));
+          headlineLarge: TextStyle(
+              color: Colors.black,
+              fontSize: 25.sp,
+              fontWeight: FontWeight.w700),
+          bodyMedium: TextStyle(
+            color: Colors.grey[600],
+            fontSize: 16.sp,
+          ),
+          bodySmall: TextStyle(
+            color: Colors.red[600],
+            fontSize: 16,
+          )));
 }

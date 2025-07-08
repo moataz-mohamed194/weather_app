@@ -3,9 +3,8 @@ part of 'injection_container.dart';
 var sl = GetIt.instance;
 
 Future<void> init() async {
-  // bloc
-  // sl.registerFactory(() =>
-  //     BillPaymentProvider(billPaymentRepository: sl(), messagesWidgets: sl()));
+  // provider
+  sl.registerFactory(() => HomeProvider(weatherRepository: sl()));
 
   //Repository
   sl.registerLazySingleton<WeatherRepository>(

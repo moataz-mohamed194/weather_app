@@ -20,7 +20,7 @@ class SplashScreen extends StatelessWidget {
           if (provider.shouldNavigate) {
             WidgetsBinding.instance.addPostFrameCallback((_) {
               Navigator.of(context).pushReplacement(
-                MaterialPageRoute(builder: (_) => const HomeScreen()),
+                MaterialPageRoute(builder: (_) => HomeScreen()),
               );
             });
           }

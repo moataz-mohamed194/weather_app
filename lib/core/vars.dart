@@ -5,3 +5,7 @@ extension EmptySpace on num {
 
   SizedBox get pw => SizedBox(width: toDouble());
 }
+
+extension ImageHandling on String {
+  String get image => "https:$this";
+}
