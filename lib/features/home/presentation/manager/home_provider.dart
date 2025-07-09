@@ -45,7 +45,23 @@ class HomeProvider extends ChangeNotifier {
     _weatherData = weatherData;
     _weatherState = StateOfRequest.done;
     _errorMessage = null;
+    _storeWeatherDataLocally(weatherData);
     notifyListeners();
+  }
+
+  void _storeWeatherDataLocally(WeatherModel? data) async {
+    if (data != null) {
+      await weatherRepository.saveLocalWeatherData(data: data);
+    }
+  }
+
+  Future<void> getWeatherLocal() async {
+    final result = await weatherRepository.getLocalWeatherData();
+
+    result.fold(
+      (failure) {},
+      (weatherData) => _handleSuccess(weatherData),
+    );
   }
 
   void _handleFailure(Failure failure) {

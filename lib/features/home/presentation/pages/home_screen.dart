@@ -20,7 +20,7 @@ class HomeScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ChangeNotifierProvider(
-        create: (_) => sl<HomeProvider>(),
+        create: (_) => sl<HomeProvider>()..getWeatherLocal(),
         child: Consumer<HomeProvider>(
           builder: (context, provider, child) {
             return Scaffold(
