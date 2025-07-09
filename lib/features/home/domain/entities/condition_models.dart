@@ -11,12 +11,18 @@ class ConditionModel extends Equatable {
 
   const ConditionModel({this.text, this.icon, this.code});
 
+  /// Creates a ConditionModel instance from JSON data
+  /// Used when parsing API responses
   factory ConditionModel.fromJson(Map<String, dynamic> json) {
     return _$ConditionModelFromJson(json);
   }
 
+  /// Converts ConditionModel to JSON format
+  /// Used for local storage and API requests
   Map<String, dynamic> toJson() => _$ConditionModelToJson(this);
 
+  /// Defines equality comparison for Equatable
+  /// Used for state comparison in UI updates
   @override
   List<Object?> get props => [text, icon, code];
 }

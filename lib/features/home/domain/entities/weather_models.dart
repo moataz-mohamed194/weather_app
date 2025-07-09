@@ -13,12 +13,18 @@ class WeatherModel extends Equatable {
 
   const WeatherModel({this.location, this.current});
 
+  /// Creates a WeatherModel instance from JSON data
+  /// Used when parsing API responses
   factory WeatherModel.fromJson(Map<String, dynamic> json) {
     return _$WeatherModelFromJson(json);
   }
 
+  /// Converts WeatherModel to JSON format
+  /// Used for local storage and API requests
   Map<String, dynamic> toJson() => _$WeatherModelToJson(this);
 
+  /// Defines equality comparison for Equatable
+  /// Used for state comparison in UI updates
   @override
   List<Object?> get props => [location, current];
 }

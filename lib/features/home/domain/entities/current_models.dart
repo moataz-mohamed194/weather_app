@@ -68,12 +68,18 @@ class CurrentModel extends Equatable {
       this.gustMph,
       this.gustKph});
 
+  /// Creates a CurrentModel instance from JSON data
+  /// Used when parsing API responses
   factory CurrentModel.fromJson(Map<String, dynamic> json) {
     return _$CurrentModelFromJson(json);
   }
 
+  /// Converts CurrentModel to JSON format
+  /// Used for local storage and API requests
   Map<String, dynamic> toJson() => _$CurrentModelToJson(this);
 
+  /// Defines equality comparison for Equatable
+  /// Used for state comparison in UI updates
   @override
   List<Object?> get props => [
         lastUpdatedEpoch,

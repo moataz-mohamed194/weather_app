@@ -24,12 +24,18 @@ class LocationModel extends Equatable {
       this.localtimeEpoch,
       this.localtime});
 
+  /// Creates a LocationModel instance from JSON data
+  /// Used when parsing API responses
   factory LocationModel.fromJson(Map<String, dynamic> json) {
     return _$LocationModelFromJson(json);
   }
 
+  /// Converts LocationModel to JSON format
+  /// Used for local storage and API requests
   Map<String, dynamic> toJson() => _$LocationModelToJson(this);
 
+  /// Defines equality comparison for Equatable
+  /// Used for state comparison in UI updates
   @override
   List<Object?> get props =>
       [name, region, country, lat, lon, tzId, localtimeEpoch, localtime];
