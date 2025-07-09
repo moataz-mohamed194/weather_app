@@ -20,6 +20,29 @@ class BuildSuccessStateOfWeather extends StatelessWidget {
           color: Colors.white, borderRadius: BorderRadius.circular(10)),
       child: Column(
         children: [
+          CachedNetworkImage(
+            imageUrl: (weather.current?.condition?.icon ?? '').image,
+            placeholder: (context, url) => const Center(
+              child: CupertinoActivityIndicator(),
+            ),
+            imageBuilder: (context, imageProvider) {
+              return Container(
+                height: 50.h,
+                width: 50.h,
+                decoration: BoxDecoration(
+                  image:
+                      DecorationImage(image: imageProvider, fit: BoxFit.fill),
+                ),
+              );
+            },
+            errorWidget: (context, url, error) {
+              return Icon(
+                Icons.error_outline,
+                color: Colors.red,
+              );
+            },
+          ),
+          10.ph,
           Text(
             weather.location?.name ?? 'Unknown City',
             style: Theme.of(context).textTheme.headlineSmall?.copyWith(
@@ -33,28 +56,6 @@ class BuildSuccessStateOfWeather extends StatelessWidget {
                   color: AppColor.darkMainColor,
                   fontWeight: FontWeight.bold,
                 ),
-          ),
-          10.ph,
-          CachedNetworkImage(
-            imageUrl: (weather.current?.condition?.icon ?? '').image,
-            placeholder: (context, url) => const Center(
-              child: CupertinoActivityIndicator(),
-            ),
-            imageBuilder: (context, imageProvider) {
-              return Container(
-                height: 50.h,
-                // width: 50.h,
-                decoration: BoxDecoration(
-                  image: DecorationImage(image: imageProvider),
-                ),
-              );
-            },
-            errorWidget: (context, url, error) {
-              return Icon(
-                Icons.error_outline,
-                color: Colors.red,
-              );
-            },
           ),
           10.ph,
           Text(

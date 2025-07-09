@@ -1,3 +1,4 @@
+import 'package:dartz/dartz.dart';
 import 'package:dio/dio.dart';
 import 'package:dio/dio.dart' as di;
 import 'package:flutter/foundation.dart';
@@ -40,18 +41,14 @@ class MainApiConnection {
   // Validating Request.
   bool validResponse(di.Response response) {
     int? statusCode = response.statusCode;
-    bool? result = response.data['result'];
-    if (statusCode == null || result == false) {
+    if (statusCode == null) {
       return false;
     } else {
       return (statusCode >= 200 && statusCode < 300);
     }
   }
-////////////////////////////////////////////////////////////////////////////
 
-  ///////////////////////////////// UTILS /////////////////////////////////////
-
-  Future<di.Response<dynamic>> get({
+  Future<Either<ServerException, Response>> get({
     required String url,
     Map<String, dynamic>? queryParameters,
   }) async {
@@ -63,45 +60,16 @@ class MainApiConnection {
       );
 
       if (validResponse(response)) {
-        return response;
+        return Right(response);
       } else {
         throw MessageException(
-            message: response.data['msg'] ??
+            message: response.data['error']['message'] ??
                 'An error occurred while processing your request.');
       }
     } on DioException catch (e) {
-      if (e.response?.data != null && e.response?.data['msg'] != null) {
-        throw MessageException(message: e.response?.data['msg']);
-      }
-      throw MessageException(
-          message:
-              e.message ?? 'An error occurred while processing your request.');
-    }
-  }
-
-  Future<di.Response<dynamic>> post({
-    required String url,
-    Map<String, dynamic>? queryParameters,
-    data,
-    Map<String, String?>? headers,
-  }) async {
-    try {
-      final response = await dio.post(
-        url,
-        queryParameters: queryParameters,
-        data: data,
-        options: dioOptions(),
-      );
-      if (validResponse(response)) {
-        return response;
-      } else {
-        throw MessageException(
-            message: response.data['msg'] ??
-                'An error occurred while processing your request.');
-      }
-    } on DioException catch (e) {
-      if (e.response?.data != null && e.response?.data['msg'] != null) {
-        throw MessageException(message: e.response?.data['msg']);
+      if (e.response?.data != null &&
+          e.response?.data['error']['message'] != null) {
+        throw MessageException(message: e.response?.data['error']['message']);
       }
       throw MessageException(
           message:

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:dartz/dartz.dart';
+import 'package:quiver/strings.dart';
 
 import '../../../../core/enum/state_of_request.dart';
 import '../../../../core/error/failures.dart';
@@ -11,17 +11,18 @@ class HomeProvider extends ChangeNotifier {
 
   HomeProvider({required this.weatherRepository});
 
-  // State variables
   StateOfRequest _weatherState = StateOfRequest.initial;
   WeatherModel? _weatherData;
   String? _errorMessage;
 
-  // Getters
   StateOfRequest get weatherState => _weatherState;
   WeatherModel? get weatherData => _weatherData;
   String? get errorMessage => _errorMessage;
 
   Future<void> searchWeatherByCity({required String? city}) async {
+    if (isBlank(city) || _weatherState == StateOfRequest.loading) {
+      return;
+    }
     _setLoading();
 
     final result = await weatherRepository.weatherOfCityRepository(
@@ -34,13 +35,11 @@ class HomeProvider extends ChangeNotifier {
     );
   }
 
-  // Set loading state
   void _setLoading() {
     _weatherState = StateOfRequest.loading;
     notifyListeners();
   }
 
-  // Handle success
   void _handleSuccess(WeatherModel weatherData) {
     _weatherData = weatherData;
     _weatherState = StateOfRequest.done;
@@ -48,7 +47,6 @@ class HomeProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  // Handle failure
   void _handleFailure(Failure failure) {
     _weatherState = StateOfRequest.error;
 
@@ -59,7 +57,6 @@ class HomeProvider extends ChangeNotifier {
     } else {
       _errorMessage = 'Something went wrong. Please try again.';
     }
-
     notifyListeners();
   }
 }
