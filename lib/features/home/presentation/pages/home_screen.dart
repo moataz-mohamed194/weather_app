@@ -13,13 +13,18 @@ import '../widgets/build_error_state.dart';
 import '../widgets/build_initial_state.dart';
 import '../widgets/build_success_state_of_weather.dart';
 
+/// Main home screen that displays weather information
+/// Supports both portrait and landscape layouts with responsive design
 class HomeScreen extends StatelessWidget {
   HomeScreen({super.key});
+  
+  // Controller for the city search text field
   final TextEditingController _controller = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
     return ChangeNotifierProvider(
+        // Create and initialize the home provider with local weather data
         create: (_) => sl<HomeProvider>()..getWeatherLocal(),
         child: Consumer<HomeProvider>(
           builder: (context, provider, child) {
@@ -27,9 +32,11 @@ class HomeScreen extends StatelessWidget {
               backgroundColor: AppColor.bgColor,
               body: LayoutBuilder(
                 builder: (context, constraints) {
+                  // Determine if device is in landscape mode based on screen dimensions
                   final isLandscape =
                       constraints.maxWidth > constraints.maxHeight;
 
+                  // Return appropriate layout based on orientation
                   if (isLandscape) {
                     return _buildLandscapeLayout(
                         context, provider, constraints);
@@ -43,12 +50,17 @@ class HomeScreen extends StatelessWidget {
         ));
   }
 
+  /// Builds the portrait layout with vertical arrangement
+  /// Search field at top, weather content below
   Widget _buildPortraitLayout(BuildContext context, HomeProvider provider) {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 15.0),
       child: Column(
         children: [
+          // Add top padding for status bar
           MediaQuery.of(context).padding.top.ph,
+          
+          // City search text field with search button
           CustomTextFieldWidget(
             controller: _controller,
             suffixIcon: CustomButton(
@@ -69,13 +81,17 @@ class HomeScreen extends StatelessWidget {
               provider.searchWeatherByCity(city: value);
             },
           ),
-          20.ph,
+          20.ph, // Vertical spacing
+          
+          // Weather content area
           _buildWeatherContent(context, provider),
         ],
       ),
     );
   }
 
+  /// Builds the landscape layout with horizontal arrangement
+  /// Search section on left, weather content on right
   Widget _buildLandscapeLayout(
       BuildContext context, HomeProvider provider, BoxConstraints constraints) {
     return Padding(
@@ -86,6 +102,7 @@ class HomeScreen extends StatelessWidget {
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
+          // Left section: App title and search
           Expanded(
             flex: 1,
             child: Column(
@@ -99,6 +116,8 @@ class HomeScreen extends StatelessWidget {
                       ),
                 ),
                 20.ph,
+                
+                // Compact search field for landscape mode
                 CustomTextFieldWidget(
                   controller: _controller,
                   suffixIcon: CustomButton(
@@ -123,7 +142,9 @@ class HomeScreen extends StatelessWidget {
               ],
             ),
           ),
-          20.pw,
+          20.pw, // Horizontal spacing
+          
+          // Right section: Weather content (takes more space)
           Expanded(
             flex: 2,
             child: _buildWeatherContent(context, provider),
@@ -134,6 +155,8 @@ class HomeScreen extends StatelessWidget {
     );
   }
 
+  /// Builds the weather content based on the current state
+  /// Handles different UI states: initial, loading, success, and error
   Widget _buildWeatherContent(BuildContext context, HomeProvider provider) {
     switch (provider.weatherState) {
       case StateOfRequest.initial:
