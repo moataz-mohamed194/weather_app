@@ -7,10 +7,13 @@ import 'package:weather_app/core/vars.dart';
 import '../../../../core/app_color.dart';
 import '../../domain/entities/weather_models.dart';
 
+/// Widget that displays weather information when data is successfully loaded
+/// Shows city name, temperature, weather condition, and weather icon
 class BuildSuccessStateOfWeather extends StatelessWidget {
   final WeatherModel weather;
 
   const BuildSuccessStateOfWeather({super.key, required this.weather});
+  
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -20,6 +23,7 @@ class BuildSuccessStateOfWeather extends StatelessWidget {
           color: Colors.white, borderRadius: BorderRadius.circular(10)),
       child: Column(
         children: [
+          // Weather condition icon with caching and error handling
           CachedNetworkImage(
             imageUrl: (weather.current?.condition?.icon ?? '').image,
             placeholder: (context, url) => const Center(
@@ -42,14 +46,18 @@ class BuildSuccessStateOfWeather extends StatelessWidget {
               );
             },
           ),
-          10.ph,
+          10.ph, // Vertical spacing
+          
+          // City name display
           Text(
             weather.location?.name ?? 'Unknown City',
             style: Theme.of(context).textTheme.headlineSmall?.copyWith(
                   fontWeight: FontWeight.bold,
                 ),
           ),
-          10.ph,
+          10.ph, // Vertical spacing
+          
+          // Temperature display in Celsius
           Text(
             '${weather.current?.tempC?.round()}°C',
             style: Theme.of(context).textTheme.headlineLarge?.copyWith(
@@ -57,14 +65,16 @@ class BuildSuccessStateOfWeather extends StatelessWidget {
                   fontWeight: FontWeight.bold,
                 ),
           ),
-          10.ph,
+          10.ph, // Vertical spacing
+          
+          // Weather condition description
           Text(
             weather.current?.condition?.text ?? 'Unknown',
             style: Theme.of(context).textTheme.titleMedium?.copyWith(
                   color: Colors.grey[600],
                 ),
           ),
-          20.ph,
+          20.ph, // Bottom spacing
         ],
       ),
     );

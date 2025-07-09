@@ -8,15 +8,19 @@ import 'package:weather_app/core/vars.dart';
 import '../../../../core/assets_images.dart';
 import '../../../../core/enum/keys_of_app.dart';
 
+/// Splash screen widget displayed on app launch
+/// Shows app logo and name, then navigates to the home screen after a delay
 class SplashScreen extends StatelessWidget {
   const SplashScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
     return ChangeNotifierProvider(
+      // Provide SplashProvider for navigation timing
       create: (_) => SplashProvider(),
       child: Consumer<SplashProvider>(
         builder: (context, provider, child) {
+          // When the timer completes, navigate to the home screen
           if (provider.shouldNavigate) {
             WidgetsBinding.instance.addPostFrameCallback((_) {
               Navigator.of(context).pushReplacement(
@@ -29,8 +33,10 @@ class SplashScreen extends StatelessWidget {
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
+                  // App logo
                   Image.asset(AppImages.logo, width: 150.h),
-                  30.h.ph,
+                  30.h.ph, // Vertical spacing
+                  // App name
                   Text(KeysOfApp.appName.key(),
                       style: Theme.of(context).textTheme.headlineLarge),
                 ],

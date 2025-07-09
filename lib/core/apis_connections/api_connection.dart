@@ -7,19 +7,19 @@ import 'package:pretty_dio_logger/pretty_dio_logger.dart';
 import '../error/exceptions.dart';
 import '../error/failures_messages.dart';
 
+/// Main API connection class for handling HTTP requests
+/// Manages Dio HTTP client, interceptors, and request/response handling
 class MainApiConnection {
-  //Singleton
+  // Singleton pattern implementation
   MainApiConnection() {
-    // Attach Interceptors.
+    // Attach logging interceptor only in debug mode for performance
     if (kDebugMode) dio.interceptors.add(_logger);
   }
 
-  // static final ApiProvider instance = ApiProvider._();
-
-  // Http Client
+  // HTTP client instance using Dio
   Dio dio = Dio();
 
-  // Logger
+  // Logger interceptor for debugging API requests and responses
   final PrettyDioLogger _logger = PrettyDioLogger(
     requestBody: true,
     responseBody: true,
@@ -27,19 +27,19 @@ class MainApiConnection {
     error: true,
   );
 
-  // Performance Interceptor
-
-  // Headers
+  // Default headers for API requests
   static const Map<String, dynamic> apiHeaders = <String, dynamic>{
     'Accept': 'application/json'
   };
 
   ////////////////////////////// END POINTS ///////////////////////////////////
+  /// Weather API endpoint for current weather data
   String dataOfWeatherEndPoint = "current.json";
 
 ////////////////////////////////////////////////////////////////////////////
 
-  // Validating Request.
+  /// Validates HTTP response status codes
+  /// Returns true for successful responses (200-299 range)
   bool validResponse(di.Response response) {
     int? statusCode = response.statusCode;
     if (statusCode == null) {
@@ -49,25 +49,31 @@ class MainApiConnection {
     }
   }
 
+  /// Performs HTTP GET requests with error handling
+  /// Returns Either<ServerException, Response> for functional error handling
   Future<Either<ServerException, Response>> get({
     required String url,
     Map<String, dynamic>? queryParameters,
   }) async {
     try {
+      // Perform GET request with query parameters
       di.Response response = await dio.get(
         url,
         queryParameters: queryParameters,
         options: dioOptions(),
       );
 
+      // Validate response status
       if (validResponse(response)) {
         return Right(response);
       } else {
+        // Handle server error responses
         throw MessageException(
             message:
                 response.data['error']['message'] ?? SERVER_FAILURE_MESSAGE);
       }
     } on DioException catch (e) {
+      // Handle Dio-specific errors (network, timeout, etc.)
       if (e.response?.data != null &&
           e.response?.data['error']['message'] != null) {
         throw MessageException(message: e.response?.data['error']['message']);
@@ -76,6 +82,8 @@ class MainApiConnection {
     }
   }
 
+  /// Creates Dio options with custom headers
+  /// Allows overriding default headers when needed
   Options dioOptions([Map<String, String?>? headers]) {
     return Options(
       // contentType: 'application/json',
