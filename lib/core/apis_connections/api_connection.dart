@@ -5,6 +5,7 @@ import 'package:flutter/foundation.dart';
 import 'package:pretty_dio_logger/pretty_dio_logger.dart';
 
 import '../error/exceptions.dart';
+import '../error/failures_messages.dart';
 
 class MainApiConnection {
   //Singleton
@@ -63,17 +64,15 @@ class MainApiConnection {
         return Right(response);
       } else {
         throw MessageException(
-            message: response.data['error']['message'] ??
-                'An error occurred while processing your request.');
+            message:
+                response.data['error']['message'] ?? SERVER_FAILURE_MESSAGE);
       }
     } on DioException catch (e) {
       if (e.response?.data != null &&
           e.response?.data['error']['message'] != null) {
         throw MessageException(message: e.response?.data['error']['message']);
       }
-      throw MessageException(
-          message:
-              e.message ?? 'An error occurred while processing your request.');
+      throw MessageException(message: e.message ?? SERVER_FAILURE_MESSAGE);
     }
   }
 

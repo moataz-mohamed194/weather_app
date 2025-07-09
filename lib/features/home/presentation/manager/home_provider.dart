@@ -3,6 +3,7 @@ import 'package:quiver/strings.dart';
 
 import '../../../../core/enum/state_of_request.dart';
 import '../../../../core/error/failures.dart';
+import '../../../../core/error/failures_messages.dart';
 import '../../domain/entities/weather_models.dart';
 import '../../domain/repositories/repositories_weather.dart';
 
@@ -53,9 +54,9 @@ class HomeProvider extends ChangeNotifier {
     if (failure is ServerFailure) {
       _errorMessage = failure.message;
     } else if (failure is CheckYourNetwork) {
-      _errorMessage = 'No internet connection. Please check your network.';
+      _errorMessage = NO_INTERNET_MESSAGE;
     } else {
-      _errorMessage = 'Something went wrong. Please try again.';
+      _errorMessage = SERVER_FAILURE_MESSAGE;
     }
     notifyListeners();
   }
